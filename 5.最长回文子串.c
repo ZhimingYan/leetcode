@@ -5,99 +5,22 @@
  */
 
 // @lc code=start
-#include<stdbool.h>
-#define N 1001
-char g_res[N];
-int min(int a, int b)
-{
-    if (a <= b) {
-        return  a;
+void help(char *s, int N, int left, int right, int *start, int *len) {
+    while (left >= 0 && right < N && s[left] == s[right])
+        left--, right++;
+    if (right - left - 1 > *len) {  // 如果找到更长的子串，保存其信息
+        *start = left + 1;
+        *len = right - left - 1;
     }
-    return b;
-} 
-
-int max(int a, int b)
-{
-    if (a >= b) {
-        return  a;
-    }
-    return b;
-} 
-
-bool IsPalindrom(char *s, int left , int right) 
-{
-    while (left < right)
-    {
-        if (s[left] != s[right]) {
-            return false;
-        }
-        left++;
-        right--;
-    }
-    return true;
-
 }
-
-bool IsPalindrom2(char *s, int left , int right) 
-{
-    if ((left == right) || ((right - left == 1) && (s[left] == s[right]))) {
-        return true;
-    }
-    if (left > right) {
-        return false;
-    }
-
-    return IsPalindrom(s, left + 1, right - 1);
-}
-
-typedef struct 
-{
-    int left;
-    int right;
-    int gap;
-}Bound;
-
-
 char * longestPalindrome(char * s){
-    int len = strlen(s);
-    int left, right;
-    Bound bound = { 0 };
-    for (int i = 1; i < len; i++) {
-        for (left = i - 1, right = i + 1; left >= 0 && right < len; left-- , right++) {
-            if (IsPalindrom2(s, left, right)) {
-                if (right - left > bound.gap) {
-                    bound.right = right;
-                    bound.left = left;
-                    bound.gap = right - left;
-                } else {
-                   continue;
-                }
-            }
-        }
-    }
-
-    for (int i = 0; i < len; i++) {
-        for (left = i, right = i + 1; left >= 0 && right < len; left--, right++) {
-            if (IsPalindrom2(s, left, right)) {
-                if (right - left > bound.gap) {
-                    bound.right = right;
-                    bound.left = left;
-                    bound.gap = right - left;
-                } else
-                {
-                    continue;
-                }
-            }
-        }
-    }
-
-    int index = 0;
-    for ( int i = bound.left ; i <= bound.right; i++) {
-        g_res[index++] = s[i];
-    }
-    g_res[index] = '\0';
-
-    return g_res;
+    int N = strlen(s), start = 0, len = 0;  // N 字符串长度， start 子串起始位置， len 子串长度
+    for (int i = 0; i < N; i++)     // 奇数长度的回文子串
+        help(s, N, i-1, i+1, &start, &len);
+    for (int i = 0; i < N; i++)     // 偶数长度的回文子串
+        help(s, N, i, i+1, &start, &len);
+    s[start + len] = '\0';          // 原地修改返回
+    return s + start;
 }
 
 
