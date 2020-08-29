@@ -24,6 +24,9 @@ int g_tail;
 
 void dfs(int **A, int x, int y)
 {
+    if (A[x][y] == 0 || A[x][y] == 2) {
+        return;
+    }
     g_queue[g_tail].x = x;
     g_queue[g_tail].y = y;
     g_tail++;
@@ -32,12 +35,6 @@ void dfs(int **A, int x, int y)
         int dx = g_dx[i] + x;
         int dy = g_dy[i] + y;
         if (dx < 0 || dx >= g_r || dy < 0 || dy >= g_c) {
-            continue;
-        }
-        if (A[dx][dy] == 0) {
-            continue;
-        }
-        if (A[dx][dy] == 2) {
             continue;
         }
         dfs (A, dx, dy);
@@ -84,8 +81,7 @@ int shortestBridge(int** A, int ASize, int* AColSize){
                 if (A[dx][dy] == 1) {
                     return step;
                 }
-            }
-           
+            }  
         }
         step++;        
     }
