@@ -6,16 +6,14 @@
 
 // @lc code=start
 bool searchMatrix(int** matrix, int matrixRowSize, int matrixColSize, int target) {
-   for (int i = 0; i < matrixRowSize; ) {
-       for (int j = matrixColSize - 1; j >= 0; ) {
+   for (int i = 0, j = matrixColSize - 1; i < matrixRowSize &&  j >= 0 ; ) {
            if (matrix[i][j] == target) {
                return true;
            } else if (matrix[i][j] < target) {
-               j--;
-           } else {
                i++;
+           } else {
+               j--;
            }
-       }
    }
    return false;
 }

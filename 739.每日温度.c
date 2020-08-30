@@ -55,10 +55,10 @@ int* dailyTemperatures(int* T, int TSize, int* returnSize)
 {
     int i;
     int stackIndex;
-    bool rslt;
+    bool ret;
     g_tempLen = 0;
-    rslt = MallocDailyTemperatures(T, TSize);
-    if (!rslt) {
+    ret = MallocDailyTemperatures(T, TSize);
+    if (!ret) {
         (*returnSize) = 0;
         return NULL;
     }

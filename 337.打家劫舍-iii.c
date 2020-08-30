@@ -18,8 +18,7 @@
 #define MAX(a,b) (a>b?a:b)
 
 int *doRob(struct TreeNode* root) {
-	int *rob = (int*)malloc(sizeof(int) * 2);
-	memset(rob, 0, sizeof(int) * 2);
+	int rob[2] = {0};
 	if (!root) return rob;
 	int* left = doRob(root->left);
 	int* right = doRob(root->right);
@@ -30,6 +29,28 @@ int *doRob(struct TreeNode* root) {
 int rob(struct TreeNode* root) {
 	int *rob = doRob(root);
 	return MAX(rob[0], rob[1]);
+}
+
+int rob(struct TreeNode* root){
+    if (root == NULL) {
+        return 0;
+    }
+
+    int haveRoot = root->val;
+    if (root->left) {
+        haveRoot += rob(root->left->left);
+        haveRoot += rob(root->left->right);
+    }
+    if (root->right) {
+        haveRoot += rob(root->right->left);
+        haveRoot += rob(root->right->right);
+    }
+
+     int haveNoRoot = 0;
+     haveNoRoot += rob(root->left);
+     haveNoRoot += rob(root->right);
+
+     return (haveRoot > haveNoRoot ? haveRoot : haveNoRoot);
 }
 
 // @lc code=end

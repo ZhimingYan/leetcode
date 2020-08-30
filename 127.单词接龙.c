@@ -6,6 +6,7 @@
 
 // @lc code=start
 
+#include <stdbool.h>
 #define MAX_QUEUE_LEN 100000
 
 static bool IsMatch(const char *word1, const char *word2)
