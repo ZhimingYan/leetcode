@@ -1,11 +1,4 @@
-/*
- * @lc app=leetcode.cn id=200 lang=c
- *
- * [200] 岛屿数量
- */
-
-// @lc code=start
-#define MAX_NN 100
+#define MAX_NN 1000000
 int g_father[MAX_NN];
 int g_fatherLen;
 
@@ -47,33 +40,36 @@ int numIslands(char** grid, int gridSize, int* gridColSize){
 
     int dx[4] = {0, 0, 1, -1};
     int dy[4] = {1, -1, 0, 0};
-    int m = gridSize;
-    int n = gridColSize[0];
-    for (int i = 0; i < m*n; i++) {
-        int current_x = i / m;
-        int current_y = i % m;
+    int mm = gridSize;
+    int nn = gridColSize[0];
+    for (int i = 0; i < mm*nn; i++) {
+        int current_x = i / nn;
+        int current_y = i % nn;
         if (grid[current_x][current_y] == '1') {
             for (int k = 0; k < 4; k++) {
                 int x = current_x + dx[k];
                 int y = current_y + dy[k];
-                if (x < 0 || x >= m || y < 0 || y >= n) {
+                if (x < 0 || x >= mm || y < 0 || y >= nn) {
+                    continue;
+                }
+                if (grid[x][y] == '0') {
                     continue;
                 }
                 if (grid[x][y] == '1') {
-                    Union(i, x * m + y);
+                    Union(i, x * nn + y);
                 }
             }
         }
     }
 
-    int count = 0;
+    int res = 0;
     for (int i = 0; i < g_fatherLen; i++) {
-        if (i == Find(i)) {
-            count++;
+        int current_x = i / nn;
+        int current_y = i % nn;
+        if (grid[current_x][current_y] == '1' && i == Find(i)) {
+            res++;
         }
     }
 
-    return count;
+    return res;
 }
-// @lc code=end
-
