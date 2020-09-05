@@ -8,7 +8,7 @@
 void help(char *s, int N, int left, int right, int *start, int *len) {
     while (left >= 0 && right < N && s[left] == s[right])
         left--, right++;
-    if (right - left - 1 > *len) {  // 如果找到更长的子串，保存其信息
+    if (right - left - 1 > * len) {  // 如果找到更长的子串，保存其信息
         *start = left + 1;
         *len = right - left - 1;
     }
