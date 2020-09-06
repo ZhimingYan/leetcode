@@ -1,118 +1,71 @@
-/*
- * @lc app=leetcode.cn id=508 lang=c
- *
- * [508] 出现次数最多的子树元素和
- */
-
-// @lc code=start
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     struct TreeNode *left;
- *     struct TreeNode *right;
- * };
- */
-
-
-/**
- * Note: The returned array must be malloced, assume caller calls free().
- */
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     struct TreeNode *left;
- *     struct TreeNode *right;
- * };
- */
-
-
-/**
- * Note: The returned array must be malloced, assume caller calls free().
- */
-#define MAXNN 100000
-
 typedef struct myHash {
-    int key;
+    long key;
     int val;
     UT_hash_handle hh;
 } Hash;
 
 Hash *g_hash = NULL;
 
-void AddHash(int a)
+
+void AddHash(long a) {
+    Hash *p = NULL;
+    HASH_FIND_INT(g_hash, &a, p);
+    if (p == NULL) {
+        p = (Hash *)malloc(sizeof(Hash));
+        p->key = a;
+        p->val = 1;
+        HASH_ADD_INT(g_hash, key, p);
+    } else {
+        p->val++;
+    }    
+}
+void FreeAll()
 {
-    Hash *s = NULL;
-    HASH_FIND_INT(g_hash, &a, s);
-    if (s != NULL) {
-        s->val++;
-        return;
+    Hash *cur, *tmp;
+    HASH_ITER(hh, g_hash, cur, tmp) {
+        HASH_DEL(g_hash, cur);
+        free(cur);
     }
-    s = (Hash *)malloc(sizeof(Hash));
-    s->key = a;
-    s->val = 1;
-    HASH_ADD_INT(g_hash, key, s);
+    return;
 }
 
-void DelHash()
+int Match(int *nums1, int nums1Size, int *numsm2, int nums2Size)
 {
-    Hash *s = NULL;
-    Hash *tmp = NULL;
-    HASH_ITER(hh, g_hash, s, tmp) {
-        HASH_DEL(g_hash, s);
-        free(s);
-    }
-}
-
-int cmp(Hash *a, Hash *b)
-{
-    return (b->val - a->val);//从大到小
-}
-
-void SortHash()
-{
-    HASH_SORT(g_hash, cmp);
-}
-
-int dfs(struct TreeNode *root){
-    if(root == NULL) {
+    if (nums1Size == 1) {
         return 0;
     }
-    int leftSum = dfs(root->left);
-    int rightSum = dfs(root->right);
-    int sum = leftSum + rightSum + root->val;
-    AddHash(sum);
-    return sum;
+    g_hash = NULL;
+    long tmp = 0;
+    for (int i = 0; i < nums1Size; i++) {
+        tmp = (long)nums1[i]*nums1[i];
+        AddHash(tmp);
+    }
+    int count = 0;
+    for (int i = 0; i < nums2Size; i++) {
+        for (int j = i + 1; j < nums2Size; j++) {
+            Hash *p = NULL;
+            long tmp2 = (long)numsm2[i] * numsm2[j];
+            HASH_FIND_INT(g_hash, &tmp2, p);//uthash没有long类型么
+            int a = (int )tmp2;
+            if (nums1Size == 1) {
+                printf("%ld" ,tmp2);
+            }
+            if (p == NULL) {
+                continue;
+            }
+            count += p->val;
+        }
+    }
+    FreeAll();
+    printf("%d\n" , count);
+    return count;
+
 }
 
-int* findFrequentTreeSum(struct TreeNode* root, int* returnSize){
-    g_hash = NULL;
-    dfs (root);
-    SortHash();
-    int *res = (int *)malloc(sizeof(int) * MAXNN);
-    memset(res, 0, sizeof(int) * MAXNN);
-    Hash *s = NULL;
-    Hash *tmp = NULL;
-    int index = 0;
-    int pre =  -1;
-    HASH_ITER(hh, g_hash, s, tmp) {
-        if (index == 0) {
-            res[index++] = s->key;
-            pre = s->val;
-            continue;
-        }
-        if (s->val == pre) {
-            res[index++] = s->key;
-            continue;
-        }
-        break;
-    }
-    *returnSize = index;
+
+
+int numTriplets(int* nums1, int nums1Size, int* nums2, int nums2Size){
+    int res = Match(nums1, nums1Size, nums2, nums2Size) + Match(nums2, nums2Size, nums1, nums1Size);
+    
     return res;
 }
-
-
-
-// @lc code=end
-
