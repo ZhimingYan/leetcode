@@ -93,7 +93,7 @@ char *** groupAnagrams(char ** strs, int strsSize, int* returnSize, int** return
         (*returnColumnSizes)[size] = cur->size;
         ++size;
     }
-    FreeHash
+    FreeHash();
     return res;
 }
 // @lc code=end
