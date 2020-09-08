@@ -6,7 +6,6 @@
 
 // @lc code=start
 
-
 int compareVersion(char * version1, char * version2){
     int n = strlen(version1);
     int m = strlen(version2);
