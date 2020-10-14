@@ -13,6 +13,7 @@ LogSystem* logSystemCreate() {
 }
 
 void logSystemPut(LogSystem* obj, int id, char * timestamp) {
+    
     LogSystem *new_node = logSystemCreate();
     new_node->id = id;
     strcpy(new_node->timestamp, timestamp);
